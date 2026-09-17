@@ -1,13 +1,13 @@
 # Disentangling Chemical Representations in GNN Graph Embeddings via Sparse Autoencoders
 
-Jinyoung Yu, Dasom Noh, Seong Hun Kim, Sunyoung Kwon · Pusan National University · **KCC 2026**
+Jinyoung Yu, Dasom Noh, Seong Hun Kim, Sunyoung Kwon · Pusan National University · **KCC 2026** (Korea Computer Congress)
 [paper (PDF, Korean)](paper/KCC2026_GNN_SAE_paper.pdf) · [slides](paper/KCC2026_GNN_SAE_slides.pdf)
 
 We train a JumpReLU sparse autoencoder (32 → 1,024) on the graph embeddings of a pretrained molecular GNN ([GEM](https://www.nature.com/articles/s42256-021-00438-4)) using 2.2M ZINC15 molecules. The sparse code keeps downstream performance close to the dense embedding, and some of its features correspond to specific drug classes.
 
 ## Results
 
-**Downstream information is largely preserved.** The SAE reaches an explained variance of 0.9999 on ZINC15 with about 52 of 1,024 features active per molecule. An MLP head trained on frozen features gives ROC-AUC within 0.02 across the original embedding, the sparse code, and the reconstruction (scaffold split, mean over 5 seeds):
+**Downstream information is largely preserved.** The SAE reaches an explained variance of 0.9999 on ZINC15 with about 52 of 1,024 features active per molecule. An MLP head trained on frozen features gives ROC-AUC within 0.03 across the original embedding, the sparse code, and the reconstruction (scaffold split, mean over 5 seeds):
 
 | | BBBP | ClinTox | BACE |
 |---|---|---|---|
@@ -40,9 +40,9 @@ pip install -r requirements.txt
 python analysis/hero_features.py        # Cohen's d          -> results/hero_features.json
 python analysis/plot_hero.py            # Figures 3 and 4    -> results/
 python analysis/plot_training_curve.py  # Figure 2           -> results/
-python analysis/eval_downstream.py      # Table 2 (about 5 min on a GPU)
+python analysis/eval_downstream.py      # Table 2 (a few minutes)
 ```
 
-The training pipeline in `gem_sae/` (ZINC15 sampling → 3D conformers → GEM layer-8 extraction → `run_paper_sae.sh`) requires [PaddleHelix GEM](https://github.com/PaddlePaddle/PaddleHelix) with `paddlehelix_gem.patch` applied and `sae-lens==6.39.0`. Training logs: [W&B](https://wandb.ai/yoo122333-pusan-national-university/gem_sae_vocfix/runs/b1vcu50z).
+The training pipeline in `gem_sae/` (ZINC15 sampling → 3D conformers → GEM layer-8 extraction → `run_paper_sae.sh`) requires [PaddleHelix GEM](https://github.com/PaddlePaddle/PaddleHelix) with `paddlehelix_gem.patch` applied and `sae-lens==6.39.0`. The training curve of the paper run is in `data/training_curve_b1vcu50z.csv` (exported from W&B).
 
 Built on [SAELens](https://github.com/decoderesearch/SAELens) and PaddleHelix GEM.

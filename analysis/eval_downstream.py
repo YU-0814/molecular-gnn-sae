@@ -1,4 +1,4 @@
-"""Table 2: ROC-AUC of a frozen-feature MLP head on raw GEM (32d) / SAE sparse (1024d) / SAE reconstruction (32d). Scaffold split, 100 epochs, 5 seeds."""
+"""Table 2: ROC-AUC of a frozen-feature MLP head on raw GEM (32d) / SAE sparse (1024d) / SAE reconstruction (32d). Scaffold split, 100 epochs, batch 32, 5 seeds (the paper text says batch 64; 32 is what reproduces the reported numbers)."""
 from __future__ import annotations
 
 import argparse
