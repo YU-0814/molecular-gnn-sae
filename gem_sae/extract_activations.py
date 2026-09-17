@@ -18,9 +18,9 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=Path("model_configs/geognn_l8.json"),
     )
-    # GEM 체크포인트. 비우면 random encoder라 반드시 지정 (논문: class.pdparams).
+    # GEM checkpoint; required (paper: pretrain_models-chemrl_gem/class.pdparams).
     parser.add_argument("--init-model", type=Path, default=None)
-    # 논문은 8층 그래프 임베딩만 사용.
+    # The paper uses layer 8 only.
     parser.add_argument("--capture-layers", type=str, default="8")
     parser.add_argument(
         "--representation",
@@ -30,7 +30,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--batch-size", type=int, default=64)
     parser.add_argument("--num-workers", type=int, default=4)
     parser.add_argument("--chunk-size-graphs", type=int, default=20000)
-    # float16은 디스크 절반. sae_data가 SAELens용으로 float32로 다시 cast.
+    # float16 halves disk usage; sae_data casts back to float32 for training.
     parser.add_argument("--save-dtype", choices=("float16", "float32"), default="float16")
     parser.add_argument("--max-molecules", type=int, default=None)
     parser.add_argument("--save-smiles-manifest", action="store_true")

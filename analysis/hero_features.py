@@ -10,7 +10,7 @@ import torch
 from common import DATA, RESULTS, JumpReLUSAE, cohens_d, load_activations
 
 HEROES = [
-    # (약물 클래스, SAE feature, 이름 패턴)
+    # (drug class, SAE feature index, name matcher on BBBP molecule names)
     ("Corticosteroid", 690,
      lambda n: any(p in n for p in ["predn", "cortis", "asone", "olone", "methasone", "cortone", "fluticasone"])),
     ("Inhalational anesthetic", 819, lambda n: "flurane" in n),
@@ -30,7 +30,7 @@ def main():
     for label, fi, is_target in HEROES:
         mask = np.array([is_target(n) for n in names])
         neuron_d = [cohens_d(X[:, n], mask) for n in range(32)]
-        bn = int(np.argmax(np.abs(neuron_d)))  # sign sweep: 절댓값 최대
+        bn = int(np.argmax(np.abs(neuron_d)))  # sign sweep: largest |d|
         vals = F[:, fi]
         top = np.where(mask & (vals > 0))[0]
         top = top[np.argsort(vals[top])[::-1]][:N_SHOW]

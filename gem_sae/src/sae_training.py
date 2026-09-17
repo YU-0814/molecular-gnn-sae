@@ -43,7 +43,7 @@ except ModuleNotFoundError:
 
 
 def ensure_saelens_importable(root: Path | None = None) -> None:
-    """``root``가 주어지면 그 SAELens 소스 체크아웃을 우선 import, 아니면 설치된 패키지 사용."""
+    """Prefer a SAELens source checkout at ``root`` if given; otherwise use the installed package."""
     if root is not None and str(root.resolve()) not in sys.path:
         sys.path.insert(0, str(root.resolve()))
 

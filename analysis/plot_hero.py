@@ -16,7 +16,7 @@ from PIL import Image
 from rdkit import Chem
 from rdkit.Chem.Draw import rdMolDraw2D
 
-from common import DATA, FIGURES, RESULTS, JumpReLUSAE, load_activations
+from common import DATA, RESULTS, JumpReLUSAE, load_activations
 from hero_features import HEROES
 
 COLORS = {"Corticosteroid": "#c0392b", "Inhalational anesthetic": "#1a5276", "Anthracycline": "#1e6b3e"}
@@ -25,7 +25,7 @@ plt.rcParams.update({"font.family": "serif", "font.size": 18, "axes.linewidth": 
 
 
 def draw_mol(smi, px=1200, pad=4):
-    """분자 그림을 그린 뒤 여백을 잘라 정사각형 캔버스에 중앙 배치."""
+    """Render a molecule, crop the whitespace and center it on a square canvas."""
     mol = Chem.MolFromSmiles(smi)
     drawer = rdMolDraw2D.MolDraw2DCairo(px, px)
     o = drawer.drawOptions()
@@ -74,7 +74,7 @@ def main():
     is_target = {label: fn for label, _, fn in HEROES}
     rng = np.random.default_rng(42)
 
-    # 그림 3: 산점도
+    # Figure 3: activation scatter, SAE feature vs. best GEM neuron
     fig = plt.figure(figsize=(8.0, 12.4))
     gs = gridspec.GridSpec(3, 2, figure=fig, hspace=0.55, wspace=0.30, left=0.10, right=0.98, top=0.93, bottom=0.06)
     for r, h in enumerate(heroes):
@@ -86,9 +86,9 @@ def main():
     for col, text in enumerate(["SAE Feature", "GEM Neuron (best)"]):
         p = gs[0, col].get_position(fig)
         fig.text((p.x0 + p.x1) / 2, 0.985, text, ha="center", va="top", fontsize=22, fontweight="bold")
-    fig.savefig(FIGURES / "fig3_sae_feature_vs_gem_neuron.png", dpi=200, bbox_inches="tight")
+    fig.savefig(RESULTS / "fig3_sae_feature_vs_gem_neuron.png", dpi=200, bbox_inches="tight")
 
-    # 그림 4: 대표 분자
+    # Figure 4: top-activating molecules per feature
     fig = plt.figure(figsize=(10.5, 12.4))
     gs = gridspec.GridSpec(3, 1, figure=fig, hspace=0.78, left=0.03, right=0.99, top=0.92, bottom=0.04)
     for r, h in enumerate(heroes):
@@ -103,7 +103,7 @@ def main():
                 sp.set_visible(False)
             ax.set_xlabel(wrap_name(m["name"]), fontsize=20, labelpad=6)
         row_header(fig, gs[r, 0], f"Feature {h['feature']}: {h['label']}", COLORS[h["label"]])
-    fig.savefig(FIGURES / "fig4_feature_top_molecules.png", dpi=200, bbox_inches="tight")
+    fig.savefig(RESULTS / "fig4_feature_top_molecules.png", dpi=200, bbox_inches="tight")
     print("saved results/fig3_sae_feature_vs_gem_neuron.png, results/fig4_feature_top_molecules.png")
 
 

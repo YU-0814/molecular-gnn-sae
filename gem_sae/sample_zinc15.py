@@ -16,11 +16,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--input-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
-    # 2_000_000 + 10% oversample → dedup/cleaning 후 ~2.2M. 바꾸면 3D 캐시 재생성 필요.
+    # 2,000,000 + 10% oversample -> ~2.2M after dedup/cleaning. Changing this requires re-caching conformers.
     parser.add_argument("--target-size", type=int, default=2_000_000)
     parser.add_argument("--oversample-fraction", type=float, default=0.10)
     parser.add_argument("--shard-size", type=int, default=100_000)
-    # src.zinc15_sampling의 결정적 hash-rank 선택에 사용. seed를 바꾸면 코퍼스 전체가 바뀐다.
+    # Seed for the deterministic hash-rank selection; a different seed yields a different corpus.
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--file-glob", type=str, default="*.src.txt")
     parser.add_argument("--max-rows", type=int, default=None)

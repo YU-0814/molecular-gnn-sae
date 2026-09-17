@@ -67,7 +67,7 @@ class GemSaeTrainConfig:
     representation: Literal["node", "graph"] = "graph"
     saelens_root: Path | None = None
     d_sae: int | None = None
-    expansion_factor: int = 32  # 논문: 32 → 1024
+    expansion_factor: int = 32  # paper: 32 -> 1024
     total_training_samples: int | None = None
     train_batch_size_samples: int = 4_096
     validation_fraction: float = 0.02

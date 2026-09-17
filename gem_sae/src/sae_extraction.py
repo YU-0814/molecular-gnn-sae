@@ -348,7 +348,7 @@ def run_activation_extraction(cfg: GemActivationExtractionConfig) -> dict[str, A
         failed = 0
         t0 = time.time()
         with mp.Pool(processes=num_workers) as pool:
-            # imap (ordered) — SMILES → 활성화 row alignment 보존. imap_unordered 금지.
+            # Ordered imap keeps SMILES and activation rows aligned; do not use imap_unordered.
             for result in pool.imap(
                 _transform_smiles, smiles_list, chunksize=256
             ):

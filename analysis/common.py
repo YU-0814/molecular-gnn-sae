@@ -16,7 +16,6 @@ RDLogger.DisableLog("rdApp.*")
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
 RESULTS = ROOT / "results"
-FIGURES = ROOT / "results"
 
 DATASETS = {
     "bbbp":    dict(csv="BBBP.csv",    smi_col="smiles", task_cols=["p_np"]),
@@ -26,7 +25,7 @@ DATASETS = {
 
 
 class JumpReLUSAE:
-    """SAELens JumpReLU SAE의 inference 형식 가중치를 직접 읽는 최소 구현 (SAELens 불필요)."""
+    """Minimal JumpReLU SAE that reads SAELens inference-format weights (no SAELens dependency)."""
 
     def __init__(self, sae_dir: Path = DATA / "sae", device: str = "cpu"):
         with safe_open(sae_dir / "sae_weights.safetensors", framework="pt") as f:
@@ -56,7 +55,7 @@ def canon(smi: str) -> str:
 
 
 def load_activations(task: str) -> tuple[np.ndarray, np.ndarray, list[str]]:
-    """GEM 8층 그래프 임베딩 X[N,32], graph_ids[N], smiles[N] (graph_id 순)."""
+    """Return GEM layer-8 graph embeddings X[N, 32], graph_ids[N] and SMILES[N], in graph_id order."""
     d = np.load(DATA / "activations" / task / "graph_layer08.npz")
     X, gids = d["activations"].astype(np.float32), d["graph_ids"]
     gid_to_smi = {}
@@ -68,7 +67,7 @@ def load_activations(task: str) -> tuple[np.ndarray, np.ndarray, list[str]]:
 
 
 def load_labels(task: str, smiles: list[str]) -> np.ndarray:
-    """MoleculeNet CSV를 canonical SMILES로 join. 라벨 없는 분자는 NaN."""
+    """Join MoleculeNet labels on canonical SMILES; molecules without a label get NaN."""
     cfg = DATASETS[task]
     df = pd.read_csv(DATA / "moleculenet" / cfg["csv"])
     label_map = {canon(row[cfg["smi_col"]]): row[cfg["task_cols"]].values.astype(np.float32)
@@ -82,7 +81,7 @@ def load_labels(task: str, smiles: list[str]) -> np.ndarray:
 
 
 def cohens_d(vals: np.ndarray, mask: np.ndarray) -> float:
-    """표적(mask) vs 비표적 활성값의 Cohen's d (pooled SD, ddof=1)."""
+    """Cohen's d between target (mask) and non-target activations, pooled SD with ddof=1."""
     a, b = vals[mask], vals[~mask]
     if len(a) < 2 or len(b) < 2:
         return 0.0

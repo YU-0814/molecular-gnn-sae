@@ -30,7 +30,7 @@ class Head(nn.Module):
 
 
 def scaffold_split(smiles, frac_train=0.8, frac_val=0.1):
-    """Bemis-Murcko scaffold 기준 분할 (큰 scaffold 그룹부터 train에 채움)."""
+    """Scaffold split: assign Bemis-Murcko scaffold groups, largest first, to train / valid / test."""
     groups = {}
     for i, smi in enumerate(smiles):
         m = Chem.MolFromSmiles(smi)
@@ -116,8 +116,8 @@ def main():
     results = {t: run_task(t, a.seeds, device, sae) for t in a.tasks}
     RESULTS.mkdir(exist_ok=True)
     (RESULTS / "downstream_auc.json").write_text(json.dumps(results, indent=2))
-    print("\n표 2 (ROC-AUC, std)         " + "  ".join(f"{t:>16}" for t in a.tasks))
-    for rep, label in [("raw", "원본 32"), ("sparse", "희소 32→1024"), ("recon", "복원 32→1024→32")]:
+    print("\nTable 2 (ROC-AUC, std)      " + "  ".join(f"{t:>16}" for t in a.tasks))
+    for rep, label in [("raw", "original (32)"), ("sparse", "sparse (1024)"), ("recon", "reconstruction (32)")]:
         row = "  ".join(f"{results[t][rep]['auc_mean']:.4f} ({results[t][rep]['auc_std']:.4f})" for t in a.tasks)
         print(f"{label:<22} {row}")
     print(f"saved results/downstream_auc.json  ({time.time() - t0:.0f}s)")

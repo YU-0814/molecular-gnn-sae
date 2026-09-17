@@ -1,4 +1,4 @@
-# analysis/ (표 2, 그림 2·3·4 재현) — data/ 만으로 실행 가능
+# analysis/ (Table 2, Figures 2-4) runs from data/ alone
 numpy
 pandas
 torch
@@ -8,5 +8,5 @@ rdkit
 matplotlib
 pillow
 
-# gem_sae/ (ZINC15 추출 + SAE 학습) — 추가로 필요
-# paddlepaddle-gpu, PaddleHelix (pahelix; gem_sae/paddlehelix_gem.patch 적용), sae-lens==6.39.0, wandb
+# gem_sae/ (ZINC15 extraction and SAE training) additionally needs:
+# paddlepaddle-gpu, PaddleHelix (with gem_sae/paddlehelix_gem.patch), sae-lens==6.39.0, wandb
