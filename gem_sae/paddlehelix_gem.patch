@@ -1,0 +1,67 @@
+diff --git a/apps/pretrained_compound/ChemRL/GEM/finetune_class.py b/apps/pretrained_compound/ChemRL/GEM/finetune_class.py
+index e35921b..4feb3ee 100755
+--- a/apps/pretrained_compound/ChemRL/GEM/finetune_class.py
++++ b/apps/pretrained_compound/ChemRL/GEM/finetune_class.py
+@@ -158,14 +158,14 @@ def main(args):
+     if args.task == 'data':
+         print('Preprocessing data...')
+         dataset = get_dataset(args.dataset_name, args.data_path, task_names)
+-        dataset.transform(DownstreamTransformFn(), num_workers=args.num_workers)
++        dataset.transform(DownstreamTransformFn(), num_workers=args.num_workers, drop_none=True)
+         dataset.save_data(args.cached_data_path)
+         return
+     else:
+         if args.cached_data_path is None or args.cached_data_path == "":
+             print('Processing data...')
+             dataset = get_dataset(args.dataset_name, args.data_path, task_names)
+-            dataset.transform(DownstreamTransformFn(), num_workers=args.num_workers)
++            dataset.transform(DownstreamTransformFn(), num_workers=args.num_workers, drop_none=True)
+         else:
+             print('Read preprocessing data...')
+             dataset = InMemoryDataset(npz_data_path=args.cached_data_path)
+diff --git a/apps/pretrained_compound/ChemRL/GEM/src/featurizer.py b/apps/pretrained_compound/ChemRL/GEM/src/featurizer.py
+index 7a5f870..a0927ad 100644
+--- a/apps/pretrained_compound/ChemRL/GEM/src/featurizer.py
++++ b/apps/pretrained_compound/ChemRL/GEM/src/featurizer.py
+@@ -33,17 +33,24 @@ class DownstreamTransformFn(object):
+         """
+         Gen features according to raw data and return a single graph data.
+         Args:
+-            raw_data: It contains smiles and label,we convert smiles 
++            raw_data: It contains smiles and label,we convert smiles
+             to mol by rdkit,then convert mol to graph data.
+         Returns:
+-            data: It contains reshape label and smiles.
++            data: It contains reshape label and smiles. ``None`` if the
++            molecule cannot be featurized (invalid SMILES, wildcard atom,
++            MMFF3d failure, etc.); callers should pair this with
++            ``InMemoryDataset.transform(..., drop_none=True)``.
+         """
+         smiles = raw_data['smiles']
+-        print(smiles)
+         mol = AllChem.MolFromSmiles(smiles)
+         if mol is None:
+             return None
+-        data = mol_to_geognn_graph_data_MMFF3d(mol)
++        try:
++            data = mol_to_geognn_graph_data_MMFF3d(mol)
++        except Exception:
++            return None
++        if data is None:
++            return None
+         if not self.is_inference:
+             data['label'] = raw_data['label'].reshape([-1])
+         data['smiles'] = smiles
+diff --git a/apps/pretrained_compound/ChemRL/GEM/src/utils.py b/apps/pretrained_compound/ChemRL/GEM/src/utils.py
+index 6727542..1e1d238 100644
+--- a/apps/pretrained_compound/ChemRL/GEM/src/utils.py
++++ b/apps/pretrained_compound/ChemRL/GEM/src/utils.py
+@@ -34,8 +34,6 @@ from collections import OrderedDict
+ from datetime import datetime
+ from sklearn.metrics import roc_auc_score
+ 
+-from paddle import fluid
+-
+ from pahelix.utils.splitters import \
+     RandomSplitter, IndexSplitter, ScaffoldSplitter, RandomScaffoldSplitter
+ from pahelix.datasets import *

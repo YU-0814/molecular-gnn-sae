@@ -1,0 +1,80 @@
+[
+  {
+    "label": "Corticosteroid",
+    "feature": 690,
+    "n_target": 100,
+    "n_active": 185,
+    "sae_cohens_d": 3.898294448852539,
+    "best_neuron": 29,
+    "best_neuron_cohens_d": 1.6284878253936768,
+    "top_molecules": [
+      {
+        "name": "prednisolone-hemisuccinate",
+        "smiles": "C[C@]12C=CC(=O)C=C1CC[C@@H]1[C@@H]2[C@@H](O)C[C@@]2(C)[C@H]1CC[C@]2(O)C(=O)COC(=O)CCC(=O)[O-].[Na+]",
+        "activation": 0.167349711060524
+      },
+      {
+        "name": "methylprednisolone-acetate",
+        "smiles": "C[C@H]1C[C@@H]2[C@H]([C@@H](O)C[C@@]3(C)[C@H]2CC[C@]3(O)C(=O)COC(=O)CCC(=O)O)[C@@]2(C)C=CC(=O)C=C12",
+        "activation": 0.13858570158481598
+      },
+      {
+        "name": "prednisolone-tebutate",
+        "smiles": "CC(C)(C)CC(=O)OCC(=O)[C@@]1(O)CC[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@]4(C)[C@H]3[C@@H](O)C[C@@]21C",
+        "activation": 0.12574522197246552
+      }
+    ]
+  },
+  {
+    "label": "Inhalational anesthetic",
+    "feature": 819,
+    "n_target": 9,
+    "n_active": 10,
+    "sae_cohens_d": 18.226160049438477,
+    "best_neuron": 12,
+    "best_neuron_cohens_d": 4.261987686157227,
+    "top_molecules": [
+      {
+        "name": "norflurane",
+        "smiles": "FCC(F)(F)F",
+        "activation": 0.26668766140937805
+      },
+      {
+        "name": "desflurane",
+        "smiles": "FC(F)OC(F)C(F)(F)F",
+        "activation": 0.20988181233406067
+      },
+      {
+        "name": "Teflurane",
+        "smiles": "FC(Br)C(F)(F)F",
+        "activation": 0.18232877552509308
+      }
+    ]
+  },
+  {
+    "label": "Anthracycline",
+    "feature": 675,
+    "n_target": 13,
+    "n_active": 15,
+    "sae_cohens_d": 6.860925674438477,
+    "best_neuron": 13,
+    "best_neuron_cohens_d": 1.9509756565093994,
+    "top_molecules": [
+      {
+        "name": "carubicin",
+        "smiles": "CC(=O)[C@]1(O)Cc2c(O)c3c(c(O)c2C(OC2CC(N)C(O)C(C)O2)C1)C(=O)c1c(O)cccc1C3=O",
+        "activation": 0.09692643582820892
+      },
+      {
+        "name": "idarubicin",
+        "smiles": "CC(=O)[C@]1(O)Cc2c(O)c3c(c(O)c2[C@@H](O[C@H]2C[C@H](N)[C@H](O)[C@H](C)O2)C1)C(=O)c1ccccc1C3=O",
+        "activation": 0.0798901617527008
+      },
+      {
+        "name": "medorubicin",
+        "smiles": "CC1OC(OC2CC(O)(C(=O)CO)Cc3c(O)c4c(c(O)c32)C(=O)c2ccccc2C4=O)CC(N)C1O",
+        "activation": 0.0653979554772377
+      }
+    ]
+  }
+]
