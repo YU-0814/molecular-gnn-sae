@@ -29,7 +29,7 @@ Activation distributions: [figures/fig3](figures/fig3_sae_feature_vs_gem_neuron.
 
 <p align="center"><img src="figures/fig4_feature_top_molecules.png" width="560"></p>
 
-These observations are correlational and cover three hand-selected features; whether the features play a causal role in GEM's predictions is not tested here.
+The analysis covers three features on BBBP; causal tests are left for future work.
 
 ## Reproduce
 
